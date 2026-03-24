@@ -1,0 +1,1 @@
+public enum ComparisonOperator { None, GreaterThan, LessThan, Equals }
