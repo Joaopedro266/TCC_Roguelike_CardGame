@@ -1,1 +1,10 @@
-public enum ComparisonOperator { None, GreaterThan, LessThan, Equals }
+using UnityEngine;
+
+public enum ComparisonOperator { 
+    GreaterThan, 
+    LessThan, 
+    Equals,
+    NotEquals,
+    GreaterThanOrEqual,
+    LessThanOrEqual
+}

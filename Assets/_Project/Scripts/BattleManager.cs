@@ -14,14 +14,44 @@ public class BattleManager : MonoBehaviour {
     
     [Header("UI Feedback")]
     public TextMeshProUGUI terminalLog;
+    public Transform pipelinePanel; // Referência ao painel do pipeline
+    public GameObject cardPrefab; // Prefab para mostrar cartas no pipeline
     
     private void Awake() {
         Instance = this;
+        Debug.Log("[BATTLE MANAGER] Sistema inicializado");
     }
     
     public void AddCardToPipeline(ActionCard card) {
         codePipeline.Add(card);
         LogToTerminal($"> {card.type} added to pipeline");
+        Debug.Log($"[PIPELINE] Carta {card.type} adicionada. Total: {codePipeline.Count}");
+        
+        // Cria representação visual da carta no pipeline
+        if (pipelinePanel != null && cardPrefab != null) {
+            Debug.Log($"[PIPELINE VISUAL] Tentando criar carta visual. PipelinePanel: {pipelinePanel != null}, CardPrefab: {cardPrefab != null}");
+            GameObject cardVisual = Instantiate(cardPrefab, pipelinePanel);
+            Debug.Log($"[PIPELINE VISUAL] Carta visual criada: {cardVisual != null}");
+            
+            CardDisplay cardDisplay = cardVisual.GetComponent<CardDisplay>();
+            if (cardDisplay != null) {
+                cardDisplay.Setup(card);
+                Debug.Log("[PIPELINE VISUAL] CardDisplay configurado com sucesso");
+            } else {
+                Debug.LogError("[PIPELINE VISUAL] ERRO: CardDisplay não encontrado no prefab!");
+            }
+            
+            // Configura o texto para mostrar o tipo
+            TextMeshProUGUI cardText = cardVisual.GetComponentInChildren<TextMeshProUGUI>();
+            if (cardText != null) {
+                cardText.text = card.type.ToString();
+                Debug.Log($"[PIPELINE VISUAL] Texto configurado: {card.type}");
+            } else {
+                Debug.LogError("[PIPELINE VISUAL] ERRO: TextMeshProUGUI não encontrado no prefab!");
+            }
+        } else {
+            Debug.LogError("[PIPELINE VISUAL] ERRO: PipelinePanel ou CardPrefab não configurados no Inspector!");
+        }
     }
     
     public void ExecuteScript() {
